@@ -3,14 +3,14 @@ require 'time'
 
 class SimpleRSS
   VERSION = "1.2"
-  
+
 	attr_reader :items, :source
 	alias :entries :items
 
 	@@feed_tags = [
 		:id,
 		:title, :subtitle, :link,
-		:description, 
+		:description,
 		:author, :webMaster, :managingEditor, :contributor,
 		:pubDate, :lastBuildDate, :updated, :'dc:date',
 		:generator, :language, :docs, :cloud,
@@ -68,10 +68,10 @@ class SimpleRSS
 
 	def parse
 	  raise SimpleRSSError, "Poorly formatted feed" unless @source =~ %r{<(channel|feed).*?>.*?</(channel|feed)>}mi
-	  
+
 		# Feed's title and link
 		feed_content = $1 if @source =~ %r{(.*?)<(rss:|atom:)?(item|entry).*?>.*?</(rss:|atom:)?(item|entry)>}mi
-		
+
 		@@feed_tags.each do |tag|
 			if feed_content && feed_content =~ %r{<(rss:|atom:)?#{tag}(.*?)>(.*?)</(rss:|atom:)?#{tag}>}mi
 				nil
@@ -82,7 +82,7 @@ class SimpleRSS
 			elsif @source =~ %r{<(rss:|atom:)?#{tag}(.*?)\/\s*>}mi
 				nil
 			end
-			
+
 			if $2 || $3
         tag_cleaned = clean_tag(tag)
         eval %{ @#{ tag_cleaned } = clean_content(tag, $2, $3) }
@@ -98,7 +98,7 @@ class SimpleRSS
 			    tag_data = tag.to_s.split("+")
 			    tag = tag_data[0]
 			    rel = tag_data[1]
-			    
+
   				if match[3] =~ %r{<(rss:|atom:)?#{tag}(.*?)rel=['"]#{rel}['"](.*?)>(.*?)</(rss:|atom:)?#{tag}>}mi
             nil
   				elsif match[3] =~ %r{<(rss:|atom:)?#{tag}(.*?)rel=['"]#{rel}['"](.*?)/\s*>}mi
@@ -135,7 +135,7 @@ class SimpleRSS
 	def clean_tag(tag)
 		tag.to_s.gsub(':','_').intern
 	end
-	
+
   def unescape(content)
   	if content =~ /([^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]%)/n then
   		CGI.unescape(content).gsub(/(<!\[CDATA\[|\]\]>)/,'').strip

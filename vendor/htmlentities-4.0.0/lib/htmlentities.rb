@@ -75,7 +75,7 @@ class HTMLEntities
       raise InstructionError,
       "unknown encode_entities command(s): #{unknown_instructions.inspect}"
     end
-    
+
     basic_entity_encoder =
     if instructions.include?(:basic) || instructions.include?(:named)
       :encode_named
@@ -85,7 +85,7 @@ class HTMLEntities
       :encode_hexadecimal
     end
     string.gsub!(basic_entity_regexp){ __send__(basic_entity_encoder, $&) }
-    
+
     extended_entity_encoders = []
     if instructions.include?(:named)
       extended_entity_encoders << :encode_named
@@ -100,7 +100,7 @@ class HTMLEntities
         encode_extended(extended_entity_encoders, $&)
       }
     end
-    
+
     return string
   end
 
@@ -120,7 +120,7 @@ private
       end
     )
   end
-  
+
   def extended_entity_regexp
     @extended_entity_regexp ||= (
       regexp = '[\x00-\x1f]|[\xc0-\xfd][\x80-\xbf]+'
@@ -153,7 +153,7 @@ private
   def encode_hexadecimal(char)
     "&#x#{char.unpack('U')[0].to_s(16)};"
   end
-  
+
   def encode_extended(encoders, char)
     encoders.each do |encoder|
       encoded = __send__(encoder, char)

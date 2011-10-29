@@ -18,7 +18,7 @@ The global\_config.yml file holds application-level settings.
 * __cache\_max\_age__: cache expiry time, in seconds. No caching is performed by TweetScope itself, this simply sets the value of the Cache-Control header for use with an external caching system.
 
 ### Site Configuration ###
-Each site's config.yml file holds site-specific settings. 
+Each site's config.yml file holds site-specific settings.
 
 #### Query Settings ####
 

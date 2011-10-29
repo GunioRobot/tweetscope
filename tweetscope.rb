@@ -8,19 +8,19 @@ SimpleRSS.item_tags << :image
 
 config = ConfigReader.read
 
-get '/:site?/?' do |site| 
+get '/:site?/?' do |site|
   site ||= config['_domains'][request.env['SERVER_NAME']] || config['_global']['default_site'] || config.keys.reject{|k| k[0]==95 }.first
-  
+
   raise Sinatra::NotFound unless config.has_key?(site)
   set :views, File.dirname(__FILE__) + "/sites/#{site}"
   @site = config[site]
-  
+
   querystring = ''
   querystring += "q=#{CGI::escape(@site['query'])}" if @site['query']
   querystring += "&lang=#{@site['language']}" if @site['language']
   querystring += "&rpp=#{@site['count']}" if @site['count']
   querystring += "&geocode=#{@site['geocode']}" if @site['geocode']
-  
+
   @feed_url = "http://search.twitter.com/search.atom?#{querystring}"
   @feed = SimpleRSS.parse open(@feed_url).read.gsub('<link type="image/png"','<image')
   headers 'Cache-Control' => "public, max-age=#{@site['cache_max_age'] || config['_global']['cache_max_age']}"
@@ -31,15 +31,15 @@ helpers do
   def decode_html(string)
     HTMLEntities.new.decode(string.gsub('&#8217;','&apos;'))
   end
-  
+
   def fix_search_links(string)
     string.gsub('href="/search?','href="http://search.twitter.com/search?')
   end
-  
+
   def prepare_content(string)
     fix_search_links(decode_html(string))
   end
-  
+
   def extract_author_name(string)
     string.split(/\n/)[0].split(/ /)[0]
   end

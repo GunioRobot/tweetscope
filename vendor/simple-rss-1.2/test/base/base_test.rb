@@ -5,19 +5,19 @@ class BaseTest < Test::Unit::TestCase
 		@rss20 = SimpleRSS.parse open(File.dirname(__FILE__) + '/../data/rss20.xml'), false
 		@atom = SimpleRSS.parse open(File.dirname(__FILE__) + '/../data/atom.xml')
 	end
-	
+
 	def test_channel
 		assert_equal @rss09, @rss09.channel
 		assert_equal @rss20, @rss20.channel
 		assert_equal @atom, @atom.feed
 	end
-	
+
 	def test_items
 		assert_kind_of Array, @rss09.items
 		assert_kind_of Array, @rss20.items
 		assert_kind_of Array, @atom.entries
 	end
-	
+
 	def test_rss09
 		assert_equal 10, @rss09.items.size
 		assert_equal "Slashdot", @rss09.title
@@ -36,7 +36,7 @@ class BaseTest < Test::Unit::TestCase
 		assert_equal "http://feeds.feedburner.com/rufytech?m=68", @rss20.items.first[:link]
 		assert_equal "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.", @rss20.channel.feedburner_browserFriendly
 	end
-	
+
 	def test_atom
 		assert_equal 1, @atom.entries.size
 		assert_equal "dive into mark", @atom.title
@@ -44,7 +44,7 @@ class BaseTest < Test::Unit::TestCase
 		assert_equal "http://example.org/2005/04/02/atom", @atom.entries.first.link
 		assert_equal "http://example.org/2005/04/02/atom", @atom.entries.first[:link]
 	end
-	
+
 	def test_bad_feed
 	  assert_raise(SimpleRSSError) { SimpleRSS.parse(open(File.dirname(__FILE__) + '/../data/not-rss.xml')) }
 	end

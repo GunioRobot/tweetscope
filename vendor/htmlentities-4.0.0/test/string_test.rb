@@ -5,7 +5,7 @@ require 'test/unit'
 $KCODE = 'u'
 
 class TestHTMLEntities < Test::Unit::TestCase
-  
+
   def test_string_responds_correctly_to_decode_entities
     assert_equal('±', '&plusmn;'.decode_entities)
   end

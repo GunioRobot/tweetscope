@@ -7,18 +7,18 @@ class ConfigReader
       config[site] = read_config_file("sites/#{site}/config.yml")
     end
     raise "No sites were found. Create a site using 'rake site:create' before running TweetScope." if config.keys.size == 1
-    
+
     config['_domains'] = build_domain_map(config)
-    
+
     config
   end
-  
+
   private
-  
+
   def self.read_config_file(file)
     (File.exists?(file) && YAML::load_file(file)) || {}
   end
-  
+
   def self.build_domain_map(config)
     domain_map = {}
     config.reject{|k,v| !v.has_key?('domain') && !v.has_key?('domains')}.each do |k,v|

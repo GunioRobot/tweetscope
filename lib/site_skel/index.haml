@@ -23,15 +23,15 @@
                 %span.minute>= ':'+item.published.localtime.strftime('%M')
                 %span.meridian= item.published.localtime.strftime('%p')
             %p.content= prepare_content(item.content)
-            
+
     #footer
       /
-        %p 
+        %p
           We&apos;re searching twitter for &ldquo;
           %span.query>= @site['query']
           \&rdquo;
       %p
-        Powered by 
+        Powered by
         %a{ :href => 'http://github.com/reidab/tweetscope' } TweetScope
         |
         %a{ :href => @feed_url } Atom Feed
